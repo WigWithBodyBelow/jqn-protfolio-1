@@ -1,0 +1,73 @@
+---
+const filters = [
+  { value: 'TODOS', label: 'TODOS' },
+  { value: 'TEATRO', label: 'TEATRO' },
+  { value: 'MUSICA', label: 'MUSICA' },
+  { value: 'AUDIOVISUALES', label: 'AUDIOVISUALES' },
+  { value: 'TEXTOS', label: 'TEXTOS' },
+  { value: 'OID_MORTALES', label: 'OID MORTALES' },
+] as const;
+---
+
+<div class="filter-tabs" role="tablist" aria-label="Filtrar proyectos" id="filter-tabs">
+  {
+    filters.map((filter, index) => (
+      <button
+        role="tab"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        data-filter={filter.value}
+        tabindex={index === 0 ? 0 : -1}
+        class:list={['filter-tab', { active: index === 0 }]}
+      >
+        {filter.label}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .filter-tabs {
+    display: none;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    .filter-tabs {
+      display: flex;
+    }
+  }
+
+  .filter-tab {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: var(--fw-regular);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition:
+      color var(--transition-base),
+      border-color var(--transition-base);
+  }
+
+  .filter-tab:hover,
+  .filter-tab:focus-visible {
+    color: var(--color-text);
+  }
+
+  .filter-tab:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .filter-tab.active,
+  .filter-tab[aria-selected='true'] {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+</style>

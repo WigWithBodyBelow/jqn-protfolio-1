@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FilterTabs from '../components/FilterTabs.astro';
+import FilterDropdown from '../components/FilterDropdown.astro';
+import PortfolioGrid from '../components/PortfolioGrid.astro';
+import JsonLd from '../components/JsonLd.astro';
+import type { PortfolioItem } from '../components/PortfolioGrid.astro';
+
+const portfolioEntries = await getCollection('portfolio');
+const sorted = portfolioEntries.sort((a, b) => a.data.order - b.data.order);
+
+const items: readonly PortfolioItem[] = sorted.map((entry) => ({
+  id: entry.id,
+  title: entry.data.title,
+  subtitle: entry.data.subtitle,
+  category: entry.data.category,
+  filterTags: entry.data.filterTags,
+  image: entry.data.image,
+  imageAlt: entry.data.imageAlt,
+}));
+
+const jsonLdData: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'JQN .. Poster Art Portfolio',
+  description: 'Portfolio de poster art de Joaquin (JQN). Trabajos de teatro, musica, audiovisuales y mas.',
+  url: new URL('/', Astro.site).href,
+  hasPart: sorted.map((entry) => ({
+    '@type': 'CreativeWork',
+    name: entry.data.title,
+    description: `${entry.data.subtitle}${entry.data.category ? ` - ${entry.data.category}` : ''}`,
+    creator: {
+      '@type': 'Person',
+      name: 'Joaquin',
+      alternateName: 'JQN',
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="JQN .. Poster Art Portfolio"
+  description="Portfolio de poster art de Joaquin (JQN). Trabajos de teatro, musica, audiovisuales y mas."
+>
+  <Fragment slot="head">
+    <JsonLd data={jsonLdData} />
+  </Fragment>
+
+  <section aria-label="Filtros de proyectos">
+    <FilterDropdown />
+    <FilterTabs />
+  </section>
+
+  <section aria-label="Proyectos">
+    <PortfolioGrid items={items} />
+  </section>
+
+  <script src="../scripts/portfolio-filter.ts"></script>
+</BaseLayout>

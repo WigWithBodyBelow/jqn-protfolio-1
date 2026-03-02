@@ -1,0 +1,89 @@
+---
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/', label: 'PROYECTOS' },
+  { href: '/contacto/', label: 'CONTACTO' },
+] as const;
+---
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="JQN - Ir al inicio">JQN</a>
+    <nav aria-label="Navegacion principal">
+      <ul class="nav-list">
+        {
+          navLinks.map(({ href, label }) => {
+            const isCurrent = currentPath === href || (href !== '/' && currentPath.startsWith(href));
+            return (
+              <li>
+                <a
+                  href={href}
+                  class:list={['nav-link', { active: isCurrent }]}
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 1rem 1.5rem;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nav-list {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: var(--fw-regular);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    transition: color var(--transition-base);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link.active {
+    color: var(--color-text);
+  }
+
+  .nav-link:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+</style>

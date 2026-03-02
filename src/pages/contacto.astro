@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import JsonLd from '../components/JsonLd.astro';
+
+const jsonLdData: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contacto .. JQN',
+  description: 'Contacta a Joaquin (JQN) para consultas sobre poster art, colaboraciones y proyectos.',
+  url: new URL('/contacto/', Astro.site).href,
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Joaquin',
+    alternateName: 'JQN',
+    jobTitle: 'Poster Artist',
+  },
+};
+---
+
+<BaseLayout
+  title="Contacto .. JQN"
+  description="Contacta a Joaquin (JQN) para consultas sobre poster art, colaboraciones y proyectos."
+>
+  <Fragment slot="head">
+    <JsonLd data={jsonLdData} />
+  </Fragment>
+
+  <div class="contact-page">
+    <header class="page-header">
+      <h1>Contacto</h1>
+      <p class="page-description">
+        Si tenes una idea, un proyecto o simplemente queres charlar sobre poster art, escribime.
+      </p>
+    </header>
+
+    <div class="contact-content">
+      <section aria-label="Formulario de contacto">
+        <ContactForm />
+      </section>
+
+      <section aria-label="Redes sociales" class="social-section">
+        <h2>Encontrame en</h2>
+        <SocialLinks />
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .page-description {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+
+  .contact-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .social-section h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+</style>
