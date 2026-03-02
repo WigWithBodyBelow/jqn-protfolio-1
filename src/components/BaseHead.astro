@@ -41,7 +41,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 />
 
 <!-- Styles -->
-<style>
+<style is:global>
   @import '../styles/global.css';
   @import '../styles/utilities.css';
 </style>
